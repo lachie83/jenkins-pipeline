@@ -6,7 +6,7 @@ def login(quay_creds_id) {
     dockerEmail var (docker login -e) is deprecetiated. Supporting earlier versions
 */
 
-    println "attempt docker build/publish: ${args.host}/${args.acct}/${args.repo}:${args.tags}"
+    println "attempt docker login to quay.io using provided credentials"
 
     def dockerEmail = "."
 
