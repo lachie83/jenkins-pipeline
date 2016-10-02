@@ -1,7 +1,7 @@
 // Perform docker login to quay.io
-def quay_login() {
+def quay_login(quay_creds_id) {
 /*
-    Expects USERNAME:PASSWORD credentials named quay_cred
+    args Quay Credetianls ID name as defined in Jenkins credentials
     Utilizes the Credentials Binding Plugin to read Jenkins credentials
     dockerEmail var (docker login -e) is deprecetiated. Supporting earlier versions
 */
