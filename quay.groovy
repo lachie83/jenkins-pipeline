@@ -1,5 +1,5 @@
 // Perform docker login to quay.io
-def quay_login(quay_creds_id) {
+def login(quay_creds_id) {
 /*
     args Quay Credetianls ID name as defined in Jenkins credentials
     Utilizes the Credentials Binding Plugin to read Jenkins credentials
