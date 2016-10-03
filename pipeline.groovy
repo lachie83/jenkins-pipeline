@@ -1,4 +1,4 @@
-def kubectl_proxy() {
+def kubectlProxy() {
     // use kubectl proxy to connect with Kubernetes API
     echo "setting up kubectl"
 
@@ -7,7 +7,7 @@ def kubectl_proxy() {
 
 }
 
-def helm_deploy(Map args) {
+def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     sh "/usr/local/linux-amd64/helm init"
 
