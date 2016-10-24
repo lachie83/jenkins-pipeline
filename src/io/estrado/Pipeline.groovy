@@ -16,7 +16,7 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     sh "/usr/local/linux-amd64/helm init"
 
-    sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${pwd}/charts/croc-hunter --set ImageTag=${args.build_number},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+    sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${args.chart_dir}/charts/croc-hunter --set ImageTag=${args.build_number},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
 
     echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
 }
