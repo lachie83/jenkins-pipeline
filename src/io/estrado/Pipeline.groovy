@@ -1,8 +1,13 @@
+#!/usr/bin/groovy
+package io.estrado;
+
+
 def kubectlProxy() {
     // use kubectl proxy to connect with Kubernetes API
     echo "setting up kubectl"
 
     sh "kubectl proxy &"
+    sh "sleep 5"
     sh "kubectl --server=http://localhost:8001 get nodes"
 
 }
