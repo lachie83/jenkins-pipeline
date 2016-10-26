@@ -46,7 +46,7 @@ def containerBuildPub(Map args) {
 
     docker.withRegistry("https://${args.host}", "${args.auth_id}") {
 
-        def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
+        def img = docker.build("${args.acct}/${args.repo}")
 
         for (int i = 0; i < args.tags.size(); i++) {
             img.push(args.tags.get(i))
