@@ -44,13 +44,6 @@ def containerBuildPub(Map args) {
 
     println "Running Docker build/publish: ${args.host}/${args.acct}/${args.repo}:${args.tags}"
 
-    withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: ${args.auth_id},
-                  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-
-        sh "echo ${env.PASSWORD} | base64 --decode > ${pwd}/docker_pass"
-        sh "docker login -e ${dockerEmail} -u ${env.USERNAME} -p `cat ${pwd}/docker_pass` ${args.host}"
-        }
-
     def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
 
     for (int i = 0; i < args.tags.size(); i++) {
