@@ -11,6 +11,12 @@ def kubectlProxy() {
 
 }
 
+def helmLint(String chart_dir) {
+
+    sh "helm lint ${chart_dir}"
+
+}
+
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     sh "/usr/local/linux-amd64/helm init"
