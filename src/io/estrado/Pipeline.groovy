@@ -44,13 +44,16 @@ def containerBuildPub(Map args) {
 
     println "Running Docker build/publish: ${args.host}/${args.acct}/${args.repo}:${args.tags}"
 
-    def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
+    docker.withRegistry("https://${args.host}", "${args.auth_id}") {
 
-    for (int i = 0; i < args.tags.size(); i++) {
-        img.push(args.tags.get(i))
+        def img = docker.build("${args.acct}/${args.repo}", args.dockerfile)
+
+        for (int i = 0; i < args.tags.size(); i++) {
+            img.push(args.tags.get(i))
+        }
+
+        return img.id
     }
-
-    return img.id
 }
 
 def getContainerTags(config, Map tags = [:]) {
