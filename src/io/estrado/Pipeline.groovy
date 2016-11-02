@@ -21,7 +21,7 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     sh "/usr/local/linux-amd64/helm init"
 
-    sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.build_number},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+    sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
 
     echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
 }
@@ -71,9 +71,9 @@ def getContainerTags(config, Map tags = [:]) {
     try {
         // if branch available, use as prefix, otherwise only commit hash
         if (env.BRANCH_NAME) {
-            commit_tag = env.BRANCH_NAME + '-' + env.GIT_COMMIT_ID.substring(0, 8)
+            commit_tag = env.BRANCH_NAME + '-' + env.GIT_COMMIT_ID.substring(0, 7)
         } else {
-            commit_tag = env.GIT_COMMIT_ID.substring(0, 8)
+            commit_tag = env.GIT_COMMIT_ID.substring(0, 7)
         }
         tags << ['commit': commit_tag]
     } catch (Exception e) {
