@@ -26,6 +26,7 @@ def helmLint(String chart_dir) {
 
 def helmTest() {
     //test helm
+    sh "sleep 3600"
     sh "helm init"
     sh "helm version"
     sh "helm list"
