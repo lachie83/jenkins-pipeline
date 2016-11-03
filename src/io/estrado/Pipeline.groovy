@@ -9,11 +9,11 @@ def kubectlProxy() {
     sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
     sh "sleep 5"
 
-    // sh "kubectl config set-cluster localhost --server=http://localhost:8001"
-    // sh "kubectl config set-context localhost --cluster localhost"
-    // sh "kubectl config use-context localhost"
+     sh "kubectl config set-cluster localhost --server=http://localhost:8001"
+     sh "kubectl config set-context localhost --cluster localhost"
+     sh "kubectl config use-context localhost"
 
-    // sh "kubectl --server=http://localhost:8001 get nodes"
+     sh "kubectl --server=http://localhost:8001 get nodes"
 
 }
 
