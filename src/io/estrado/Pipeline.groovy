@@ -69,26 +69,20 @@ def containerBuildPub(Map args) {
     }
 }
 
-def getContainerPRTags(config, Map tags = [:]) {
-
-    def String commit_tag
-    def String version_tag
-
-    // PR specific commit tag
-    try {
-        commit_tag = env.BRANCH_NAME
-        tags << ['commit': commit_tag]
-    } catch (Exception e) {
-        println "WARNING: commit unavailable from env. ${e}"
-    }
-
-    return tags
-}
-
 def getContainerTags(config, Map tags = [:]) {
 
     def String commit_tag
     def String version_tag
+
+    try {
+        // if PR branch tag with only branch name
+        if (env.BRANCH_NAME.contains('PR')) {
+            commit_tag = env.BRANCH_NAME
+            tags << ['commit': commit_tag]
+            return tags
+    } catch (Exception e) {
+        println "WARNING: commit unavailable from env. ${e}"
+    }
 
     // commit tag
     try {
