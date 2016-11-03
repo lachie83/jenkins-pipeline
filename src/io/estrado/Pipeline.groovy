@@ -80,6 +80,7 @@ def getContainerTags(config, Map tags = [:]) {
             commit_tag = env.BRANCH_NAME
             tags << ['commit': commit_tag]
             return tags
+        }
     } catch (Exception e) {
         println "WARNING: commit unavailable from env. ${e}"
     }
