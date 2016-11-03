@@ -24,6 +24,14 @@ def helmLint(String chart_dir) {
 
 }
 
+def helmTest() {
+    //test helm
+    sh "helm init"
+    sh "helm version"
+    sh "helm list"
+}
+
+
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     sh "helm init"
