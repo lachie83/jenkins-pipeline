@@ -8,11 +8,11 @@ def kubectlProxy() {
     sh "kubectl proxy &"
     sh "sleep 5"
 
-    sh "kubectl config set-cluster localhost --server=http://localhost:8001"
-    sh "kubectl config set-context localhost --cluster localhost"
-    sh "kubectl config use-context localhost"
+    // sh "kubectl config set-cluster localhost --server=http://localhost:8001"
+    // sh "kubectl config set-context localhost --cluster localhost"
+    // sh "kubectl config use-context localhost"
 
-    sh "kubectl get nodes"
+    sh "kubectl --server=http://localhost:8001 get nodes"
 
 }
 
