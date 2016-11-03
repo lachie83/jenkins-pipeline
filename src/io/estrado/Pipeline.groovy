@@ -1,16 +1,18 @@
 #!/usr/bin/groovy
 package io.estrado;
 
-def kubectlProxy() {
+def kubectlConfig() {
     // use kubectl proxy to connect with Kubernetes API
     echo "setting up kubectl"
 
-     sh "kubectl proxy &"
+     //sh "kubectl proxy &"
      //sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
-     sh "sleep 5"
+     //sh "sleep 5"
 
      sh "kubectl config set-cluster localhost --server=http://localhost:8001"
      sh "kubectl config set-context localhost --cluster localhost"
+     sh "kubectl config set-cluster localhost --certificate-authority=/run/secrets/kubernetes.io/serviceaccount/ca.crt" 
+     sh "kubectl config set-credentials localhost --token=`cat /run/secrets/kubernetes.io/serviceaccount/token`"
      sh "kubectl config use-context localhost"
 
      // sh "kubectl --server=http://localhost:8001 get nodes"
@@ -24,19 +26,16 @@ def helmLint(String chart_dir) {
 
 }
 
-def helmTest() {
+def helmConfig() {
     //test helm
-    sh "sleep 3600"
     sh "helm init"
     sh "helm version"
-    sh "helm list"
 }
 
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
-    sh "helm init"
-    sh "helm version"
+    helmConfig()
 
     sh "helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
 
