@@ -13,6 +13,7 @@ def kubectlConfig() {
      sh "kubectl config set-context localhost --cluster localhost"
      sh "kubectl config set-cluster localhost --certificate-authority=/run/secrets/kubernetes.io/serviceaccount/ca.crt" 
      sh "kubectl config set-credentials localhost --token=`cat /run/secrets/kubernetes.io/serviceaccount/token`"
+     sh "kubectl config set-context localhost --user=localhost"
      sh "kubectl config use-context localhost"
 
      // sh "kubectl --server=http://localhost:8001 get nodes"
