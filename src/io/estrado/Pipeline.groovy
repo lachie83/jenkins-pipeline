@@ -6,7 +6,7 @@ def kubectlProxy() {
     echo "setting up kubectl"
 
      sh "kubectl proxy &"
-     sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
+     //sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
      sh "sleep 5"
 
      sh "kubectl config set-cluster localhost --server=http://localhost:8001"
