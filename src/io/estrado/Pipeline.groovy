@@ -14,7 +14,7 @@ def kubectlProxy() {
      sh "kubectl config use-context localhost"
 
      // sh "kubectl --server=http://localhost:8001 get nodes"
-     sh "kubectl --server=http://localhost:8001 get nodes"
+     sh "kubectl get nodes"
 
 }
 
