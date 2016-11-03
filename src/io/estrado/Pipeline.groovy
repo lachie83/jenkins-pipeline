@@ -6,6 +6,7 @@ def kubectlProxy() {
     echo "setting up kubectl"
 
     sh "kubectl proxy &"
+    sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
     sh "sleep 5"
 
     // sh "kubectl config set-cluster localhost --server=http://localhost:8001"
@@ -24,9 +25,10 @@ def helmLint(String chart_dir) {
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
-    sh "/usr/local/linux-amd64/helm init"
+    sh "helm init"
+    sh "helm version"
 
-    sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+    sh "helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
 
     echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
 }
