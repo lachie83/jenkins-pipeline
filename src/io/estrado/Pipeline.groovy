@@ -12,7 +12,7 @@ def kubectlProxy() {
     // sh "kubectl config set-context localhost --cluster localhost"
     // sh "kubectl config use-context localhost"
 
-    sh "kubectl --server=http://localhost:8001 get nodes"
+    // sh "kubectl --server=http://localhost:8001 get nodes"
 
 }
 
@@ -24,7 +24,7 @@ def helmLint(String chart_dir) {
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
-    sh "/usr/local/linux-amd64/helm init --"
+    sh "/usr/local/linux-amd64/helm init"
 
     sh "/usr/local/linux-amd64/helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
 
