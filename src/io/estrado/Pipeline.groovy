@@ -69,6 +69,22 @@ def containerBuildPub(Map args) {
     }
 }
 
+def getContainerPRTags(config, Map tags = [:]) {
+
+    def String commit_tag
+    def String version_tag
+
+    // PR specific commit tag
+    try {
+        commit_tag = env.BRANCH_NAME
+        tags << ['commit': commit_tag]
+    } catch (Exception e) {
+        println "WARNING: commit unavailable from env. ${e}"
+    }
+
+    return tags
+}
+
 def getContainerTags(config, Map tags = [:]) {
 
     def String commit_tag
