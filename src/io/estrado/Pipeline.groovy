@@ -1,34 +1,21 @@
 #!/usr/bin/groovy
 package io.estrado;
 
-def kubectlConfig() {
-    // use kubectl proxy to connect with Kubernetes API
-    echo "setting up kubectl"
-
-     //sh "kubectl proxy &"
-     //sh "kubectl -n kube-system port-forward tiller-deploy-351466555-k7y85 44134 &"
-     //sh "sleep 5"
-
-     //sh "kubectl config set-cluster localhost --server=https://${env.KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT_HTTPS}"
-     //sh "kubectl config set-context localhost --cluster localhost"
-     //sh "kubectl config set-cluster localhost --certificate-authority=/run/secrets/kubernetes.io/serviceaccount/ca.crt" 
-     //sh "kubectl config set-credentials localhost --token=`cat /run/secrets/kubernetes.io/serviceaccount/token`"
-     //sh "kubectl config set-context localhost --user=localhost"
-     //sh "kubectl config use-context localhost"
-
-     // sh "kubectl --server=http://localhost:8001 get nodes"
-     sh "kubectl get nodes"
+def kubectlTest() {
+    // Test that kubectl can correctly communication with the Kubernetes API
+    echo "running kubectl test"
+    sh "kubectl get nodes"
 
 }
 
 def helmLint(String chart_dir) {
-
+    // lint helm chart
     sh "helm lint ${chart_dir}"
 
 }
 
 def helmConfig() {
-    //test helm
+    //setup helm connectivity to Kubernetes API and Tiller
     sh "helm init"
     sh "helm version"
 }
