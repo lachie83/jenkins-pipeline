@@ -25,9 +25,16 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
 
-    sh "helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+    if (args.dry_run == 'true') {
+        println "Running dry-run deployment"
 
-    echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+    } else {
+        println "Running deployment"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
+
+        echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
+    }
 }
 
 def gitEnvVars() {
