@@ -25,7 +25,7 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
 
-    if (args.dry_run == 'true') {
+    if (args.dry_run) {
         println "Running dry-run deployment"
 
         sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set ImageTag=${args.version_tag},Replicas=${args.replicas},Cpu=${args.cpu},Memory=${args.memory} --namespace=${args.name}"
