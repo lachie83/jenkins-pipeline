@@ -3,20 +3,23 @@ package io.estrado;
 
 def kubectlTest() {
     // Test that kubectl can correctly communication with the Kubernetes API
-    echo "running kubectl test"
+    println "checking kubectl connnectivity to the API"
     sh "kubectl get nodes"
 
 }
 
 def helmLint(String chart_dir) {
     // lint helm chart
+    println "running helm lint ${chart_dir}"
     sh "helm lint ${chart_dir}"
 
 }
 
 def helmConfig() {
     //setup helm connectivity to Kubernetes API and Tiller
+    println "initiliazing helm client"
     sh "helm init"
+    println "checking client/server version"
     sh "helm version"
 }
 
@@ -37,8 +40,16 @@ def helmDeploy(Map args) {
     }
 }
 
+def helmTest(Map args) {
+    println "Running Helm test"
+
+    sh "helm test ${args.name} --cleanup"
+}
+
 def gitEnvVars() {
     // create git envvars
+    println "Setting envvars to tag container"
+
     sh 'git rev-parse HEAD > git_commit_id.txt'
     try {
         env.GIT_COMMIT_ID = readFile('git_commit_id.txt').trim()
@@ -77,6 +88,7 @@ def containerBuildPub(Map args) {
 
 def getContainerTags(config, Map tags = [:]) {
 
+    println "getting list of tags for container"
     def String commit_tag
     def String version_tag
 
@@ -127,6 +139,7 @@ def getContainerTags(config, Map tags = [:]) {
 
 def getContainerRepoAcct(config) {
 
+    println "setting container registry creds according to Jenkinsfile.json"
     def String acct
 
     if (env.BRANCH_NAME == 'master') {
