@@ -31,13 +31,19 @@ def helmDeploy(Map args) {
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.name}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.namespace}"
     } else {
         println "Running deployment"
-        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.name}"
+        sh "helm upgrade --install --wait ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.namespace}"
 
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
+}
+
+def helmDelete(Map args) {
+        println "Running helm delete ${args.name}"
+
+        sh "helm delete ${args.name}"
 }
 
 def helmTest(Map args) {
