@@ -28,6 +28,8 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
 
+    def String namespace
+
     // If namespace isn't parsed into the function set the namespace to the name
     if (args.namespace == 'null') {
         namespace = ${args.name}
