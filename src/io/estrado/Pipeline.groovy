@@ -44,7 +44,11 @@ def helmDeploy(Map args) {
     } else {
         println "Running deployment"
 
-        sh "helm upgrade --install --wait ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
+        // reimplement --wait once it works reliable
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
+
+        // sleeping until --wait works reliably
+        sleep(20)
 
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
