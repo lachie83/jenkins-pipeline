@@ -32,9 +32,9 @@ def helmDeploy(Map args) {
 
     // If namespace isn't parsed into the function set the namespace to the name
     if (args.namespace == 'null') {
-        namespace = ${args.name}
+        namespace = args.name
     } else {
-        namespace = ${args.namespace}
+        namespace = args.namespace
     }
 
     if (args.dry_run) {
