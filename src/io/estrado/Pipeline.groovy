@@ -28,13 +28,21 @@ def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
 
+    // If namespace isn't parsed into the function set the namespace to the name
+    if (args.namespace == 'null') {
+        namespace = ${args.name}
+    } else {
+        namespace = ${args.namespace}
+    }
+
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${namespace}"
     } else {
         println "Running deployment"
-        sh "helm upgrade --install --wait ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${args.namespace}"
+
+        sh "helm upgrade --install --wait ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory} --namespace=${namespace}"
 
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
