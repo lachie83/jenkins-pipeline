@@ -27,6 +27,10 @@ def helmConfig() {
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
     helmConfig()
+    def String release_overrides = ""
+    if (args.set) {
+      release_overrides = getHelmReleaseOverrides(args.set)
+    }
 
     def String namespace
 
@@ -40,15 +44,12 @@ def helmDeploy(Map args) {
     if (args.dry_run) {
         println "Running dry-run deployment"
 
-        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
+        sh "helm upgrade --dry-run --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}"
     } else {
         println "Running deployment"
 
-        // reimplement --wait once it works reliable
-        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
-
-        // sleeping until --wait works reliably
-        sleep(20)
+        sh "helm dependency update ${args.chart_dir}"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}"
 
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
@@ -185,4 +186,30 @@ def getMapValues(Map map=[:]) {
     }
 
     return map_values
+}
+
+@NonCPS
+def getHelmReleaseOverrides(Map map=[:]) {
+    // jenkins and workflow restriction force this function instead of map.each(): https://issues.jenkins-ci.org/browse/JENKINS-27421
+    def options = ""
+    map.each { key, value ->
+        options += "$key=$value,"
+    }
+
+    return options
+}
+
+def String getDomainName(String url) throws URISyntaxException {
+    URI uri = new URI(url);
+    String domain = uri.getHost();
+    return domain.startsWith("www.") ? domain.substring(4) : domain;
+}
+
+def String getSubDomainName(String domain) {
+    return domain.substring(domain.indexOf('.') + 1);
+}
+
+// Used to get the subdomain Jenkins is hosted on for new ingress resources.
+def String getSubDomainNameFromURL(String url) {
+    return getSubDomainName(getDomainName(url));
 }
