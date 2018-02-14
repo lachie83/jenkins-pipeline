@@ -49,7 +49,7 @@ def helmDeploy(Map args) {
         println "Running deployment"
 
         sh "helm dependency update ${args.chart_dir}"
-        sh "helm upgrade --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}" + "--wait"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} " + (release_overrides ? "--set ${release_overrides}" : "") + " --namespace=${namespace}" + " --wait"
 
         echo "Application ${args.name} successfully deployed. Use helm status ${args.name} to check"
     }
